@@ -4,7 +4,7 @@
 import { useWeb3 } from '@/context/Web3Provider';
 
 export default function ConnectWallet() {
-    const { account, connectWallet } = useWeb3();
+    const { account, connect } = useWeb3();
 
     const truncateAddress = (address: string) => {
         return `${address.slice(0, 6)}...${address.slice(-4)}`;
@@ -18,7 +18,7 @@ export default function ConnectWallet() {
                 </span>
             ) : (
                 <button
-                    onClick={connectWallet}
+                    onClick={connect}
                     className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
                 >
                     Connect Wallet

@@ -1,3 +1,4 @@
+// app/posts/[id]/page.tsx
 import CommentForm from "@/components/CommentForm";
 
 async function getPost(id: string) {
@@ -43,6 +44,27 @@ export default async function PostPage({ params }: { params: { id: string } }) {
             <div className="max-w-3xl mx-auto">
                 <h1 className="text-5xl font-bold mb-2">{post.title}</h1>
                 <p className="text-gray-400 mb-6">by {post.author}</p>
+                
+                {post.coin_address && (
+                    <div className="mb-6 p-4 bg-purple-900/20 border border-purple-500/30 rounded-lg">
+                        <h3 className="text-lg font-semibold text-purple-300 mb-2">🪙 This Post Has a Coin!</h3>
+                        <p className="text-sm text-gray-300 mb-2">
+                            Coin Address: 
+                            <a 
+                                href={`https://sepolia-explorer.base.org/token/${post.coin_address}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="ml-2 text-purple-400 hover:text-purple-300 underline"
+                            >
+                                {post.coin_address}
+                            </a>
+                        </p>
+                        <p className="text-xs text-gray-400">
+                            View on Base Sepolia Explorer
+                        </p>
+                    </div>
+                )}
+                
                 <div className="prose prose-invert max-w-none">
                     <p className="whitespace-pre-wrap">{post.content}</p>
                 </div>
