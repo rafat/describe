@@ -1,5 +1,7 @@
 // app/posts/[id]/page.tsx
 import CommentForm from "@/components/CommentForm";
+import RewardButton from "@/components/RewardButton";
+import ShareButtons from '@/components/ShareButtons';
 
 async function getPost(id: string) {
     // Use relative URL for internal API calls
@@ -69,6 +71,8 @@ export default async function PostPage({ params }: { params: { id: string } }) {
                     <p className="whitespace-pre-wrap">{post.content}</p>
                 </div>
 
+                <ShareButtons postTitle={post.title} />
+
                 <hr className="my-8 border-gray-700" />
 
                 <h2 className="text-3xl font-bold mb-4">Comments</h2>
@@ -77,17 +81,25 @@ export default async function PostPage({ params }: { params: { id: string } }) {
                         post.comments.map((comment: any) => (
                             <div key={comment.id} className="p-4 bg-gray-800 rounded-lg">
                                 <p className="text-gray-300">{comment.text}</p>
-                                <p className="text-xs text-gray-500 mt-2">
-                                    by {comment.author.length > 10 
-                                        ? `${comment.author.slice(0, 6)}...${comment.author.slice(-4)}`
-                                        : comment.author
-                                    }
-                                    {comment.created_at && (
-                                        <span className="ml-2">
-                                            • {new Date(comment.created_at).toLocaleDateString()}
-                                        </span>
+                                <div className="flex justify-between items-center mt-2">
+                                    <p className="text-xs text-gray-500">
+                                        by {comment.author.length > 10 
+                                            ? `${comment.author.slice(0, 6)}...${comment.author.slice(-4)}`
+                                            : comment.author
+                                        }
+                                        {comment.created_at && (
+                                            <span className="ml-2">
+                                                • {new Date(comment.created_at).toLocaleDateString()}
+                                            </span>
+                                        )}
+                                    </p>
+                                    {post.coin_address && (
+                                        <RewardButton 
+                                            coinAddress={post.coin_address}
+                                            recipientAddress={comment.author} 
+                                        />
                                     )}
-                                </p>
+                                </div>
                             </div>
                         ))
                     ) : (
