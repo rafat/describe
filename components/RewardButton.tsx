@@ -1,3 +1,4 @@
+// components/RewardButton.tsx
 'use client';
 
 import { useState } from 'react';
@@ -43,12 +44,12 @@ export default function RewardButton({ coinAddress, recipientAddress }: RewardBu
                 address: coinAddress,
                 abi: erc20Abi,
                 functionName: 'transfer',
-                args: [recipientAddress, parseEther(amount)], // `parseEther` converts the amount to the correct decimal format (18 decimals for most ERC20s)
+                args: [recipientAddress, parseEther(amount)],
                 account: account as `0x${string}`,
             });
 
             const hash = await walletClient.writeContract(request);
-            
+
             alert(`Successfully sent ${amount} coins! Transaction Hash: ${hash}`);
             setAmount('');
 
@@ -67,15 +68,15 @@ export default function RewardButton({ coinAddress, recipientAddress }: RewardBu
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="Amount"
-                className="px-2 py-1 bg-gray-700 border border-gray-600 rounded-md w-24 text-sm"
+                className="px-2 py-1 bg-gray-200 text-black border border-gray-300 rounded-md w-24 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
                 disabled={isLoading}
             />
             <button
                 onClick={handleReward}
                 disabled={isLoading || !isConnected}
-                className="px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded-md text-sm font-semibold disabled:bg-gray-500 disabled:cursor-not-allowed"
+                className="px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded-md text-sm font-semibold text-white disabled:bg-gray-500 disabled:cursor-not-allowed transition-colors"
             >
-                {isLoading ? 'Sending...' : 'Reward Comment'}
+                {isLoading ? 'Sending...' : 'Reward'}
             </button>
         </div>
     );
