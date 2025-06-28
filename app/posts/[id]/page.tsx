@@ -27,15 +27,22 @@ async function getPost(id: string) {
     return res.json();
 }
 
-export default async function PostPage({ params }: { params: { id: string } }) {
-    const { id } = params;
-    type Comment = {
-        id: number;
-        post_id: number;
-        author: `0x${string}` | string;
-        text: string;
-        created_at: string;
-    };
+type Comment = {
+    id: number;
+    post_id: number;
+    author: `0x${string}` | string;
+    text: string;
+    created_at: string;
+};
+
+export default async function PostPage({ 
+    params 
+}: { 
+    params: Promise<{ id: string }> 
+}) {
+    // Await the params Promise
+    const resolvedParams = await params;
+    const { id } = resolvedParams;
 
     try {
         const post = await getPost(id);
