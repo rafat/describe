@@ -6,8 +6,8 @@ import CoinInfoSidebar from "@/components/CoinInfoSidebar";
 
 async function getPost(id: string) {
     // Use relative URL for internal API calls
-    const baseUrl = process.env.VERCEL_URL 
-        ? `https://${process.env.VERCEL_URL}` 
+    const baseUrl = process.env.NET_URL 
+        ? `https://${process.env.NET_URL}` 
         : 'http://localhost:3000';
     
     const res = await fetch(`${baseUrl}/api/posts/${id}`, { 

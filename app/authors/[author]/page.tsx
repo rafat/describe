@@ -16,8 +16,8 @@ type Post = {
 async function getPostsByAuthor(author: string): Promise<Post[]> {
     const baseUrl =
         process.env.NEXT_PUBLIC_VERCEL_URL ||
-        process.env.VERCEL_URL
-            ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL || process.env.VERCEL_URL}`
+        process.env.NET_URL
+            ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL || process.env.NET_URL}`
             : 'http://localhost:3000';
     const res = await fetch(`${baseUrl}/api/posts/author/${author}`, {
         cache: 'no-store',
