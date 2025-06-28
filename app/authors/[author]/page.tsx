@@ -30,48 +30,42 @@ async function getPostsByAuthor(author: string): Promise<Post[]> {
 
     return res.json();
 }
-/**
- * The page component for displaying an author's profile and their posts.
- */
-export default async function AuthorPage({ params }: { params: { author: string } }) {
-    // Decode the author name from the URL params.
-    const authorName = decodeURIComponent(params.author);
-    const posts = await getPostsByAuthor(params.author);
 
-    type Post = {
-        id: number;
-        author?: string;
-        title?: string;
-        content?: string;
-        created_at?: string;
-        coin_address?: string;
-    };  
+interface AuthorPageProps {
+  params: { 
+    author: string 
+  };
+}
 
-    return (
-        <div className="max-w-4xl mx-auto">
-            <p className="text-lg text-gray-400 text-center">Posts by</p>
-            <h1 className="text-5xl font-bold mb-8 text-center text-white">{authorName}</h1>
-            <div className="space-y-8">
-                {posts && posts.length > 0 ? (
-                    posts.map((post: Post) => (
-                         <div key={post.id} className="p-6 bg-gray-800 rounded-lg shadow-lg hover:bg-gray-700/50 transition-colors duration-200 border border-gray-700">
-                            <h2 className="text-3xl font-bold mb-2">
-                                <Link href={`/posts/${post.id}`} className="text-white hover:text-blue-400 transition-colors">
-                                    {post.title}
-                                </Link>
-                            </h2>
-                            <p className="text-gray-300 mb-4 leading-relaxed">
-                                {post.content?.substring(0, 200)}...
-                            </p>
-                            <Link href={`/posts/${post.id}`} className="text-blue-400 font-semibold hover:underline">
-                                Click for More →
-                            </Link>
-                        </div>
-                    ))
-                ) : (
-                    <p className="text-center text-gray-400">This author has not published any posts yet.</p>
-                )}
+export default async function AuthorPage({ params }: AuthorPageProps) {
+  const authorName = decodeURIComponent(params.author);
+  const posts = await getPostsByAuthor(params.author);
+
+  return (
+    <div className="max-w-4xl mx-auto">
+      <p className="text-lg text-gray-400 text-center">Posts by</p>
+      <h1 className="text-5xl font-bold mb-8 text-center text-white">{authorName}</h1>
+      <div className="space-y-8">
+        {posts && posts.length > 0 ? (
+          posts.map((post) => (
+            <div key={post.id} className="p-6 bg-gray-800 rounded-lg shadow-lg hover:bg-gray-700/50 transition-colors duration-200 border border-gray-700">
+              <h2 className="text-3xl font-bold mb-2">
+                <Link href={`/posts/${post.id}`} className="text-white hover:text-blue-400 transition-colors">
+                  {post.title}
+                </Link>
+              </h2>
+              <p className="text-gray-300 mb-4 leading-relaxed">
+                {post.content?.substring(0, 200)}...
+              </p>
+              <Link href={`/posts/${post.id}`} className="text-blue-400 font-semibold hover:underline">
+                Click for More →
+              </Link>
             </div>
-        </div>
-    );
+          ))
+        ) : (
+          <p className="text-center text-gray-400">This author has not published any posts yet.</p>
+        )}
+      </div>
+    </div>
+  );
 }
