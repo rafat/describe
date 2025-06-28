@@ -1,29 +1,35 @@
 import Link from 'next/link';
 
+type Post = {
+  id: number;
+  author?: string;
+  title?: string;
+  content?: string;
+  created_at?: string;
+  coin_address?: string;
+};
+
 /**
  * Fetches all posts for a given author from the new API endpoint.
  * @param author - The URL-encoded name of the author.
  */
-async function getPostsByAuthor(author: string) {
-    const baseUrl = process.env.VERCEL_URL 
-        ? `https://${process.env.VERCEL_URL}` 
-        : 'http://localhost:3000';
-        
-    const res = await fetch(`${baseUrl}/api/posts/author/${author}`, { 
-        cache: 'no-store' 
+async function getPostsByAuthor(author: string): Promise<Post[]> {
+    const baseUrl =
+        process.env.NEXT_PUBLIC_VERCEL_URL ||
+        process.env.VERCEL_URL
+            ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL || process.env.VERCEL_URL}`
+            : 'http://localhost:3000';
+
+    const res = await fetch(`${baseUrl}/api/posts/author/${author}`, {
+        cache: 'no-store',
     });
-    
-    if (!res.ok) {
-        // If the response is not OK but not a 404, throw an error.
-        // A 404 is a valid case where an author might not have posts.
-        if (res.status !== 404) {
-             throw new Error(`Failed to fetch posts for author: ${author}`);
-        }
+
+    if (!res.ok && res.status !== 404) {
+        throw new Error(`Failed to fetch posts for author: ${author}`);
     }
-    
+
     return res.json();
 }
-
 /**
  * The page component for displaying an author's profile and their posts.
  */
