@@ -25,20 +25,20 @@ async function getPosts() {
  */
 export default async function HomePage() {
     const posts = await getPosts();
-    const postData: {
-            id?: number;
-            author?: string;
-            title?: string;
-            content?: string;
-            created_at?: string;
-            coin_address?: string;
-    } = {};
+    type Post = {
+        id: number;
+        author?: string;
+        title?: string;
+        content?: string;
+        created_at?: string;
+        coin_address?: string;
+    };
 
     return (
         <div className="max-w-4xl mx-auto">
             <h1 className="text-5xl font-bold mb-8 text-center text-white">All Posts</h1>
             <div className="space-y-8">
-                {posts.map((post: typeof postData) => (
+                {posts.map((post: Post) => (
                     <div key={post.id} className="p-6 bg-gray-800 rounded-lg shadow-lg hover:bg-gray-700/50 transition-colors duration-200 border border-gray-700">
                         <h2 className="text-3xl font-bold mb-2">
                             <Link href={`/posts/${post.id}`} className="text-white hover:text-blue-400 transition-colors">

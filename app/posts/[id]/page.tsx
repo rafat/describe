@@ -30,7 +30,7 @@ async function getPost(id: string) {
 export default async function PostPage({ params }: { params: { id: string } }) {
     const awaitedParams = await params;
     const { id } = awaitedParams;
-        type Comment = {
+    type Comment = {
         id: number;
         post_id: number;
         author: `0x${string}` | string;
