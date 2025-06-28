@@ -2,36 +2,42 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
 /**
+ * Helper to extract the [author] param from the request URL
+ */
+function getAuthorFromRequest(request: Request): string | null {
+  const url = new URL(request.url);
+  const segments = url.pathname.split('/');
+  const index = segments.indexOf('authors');
+  if (index === -1 || !segments[index + 1]) return null;
+  return decodeURIComponent(segments[index + 1]);
+}
+
+/**
  * GET handler for fetching all posts by a specific author.
  * The author's name is taken from the URL's dynamic segment.
  */
-export async function GET(
-    request: Request,
-    { params }: { params: { author: string } }
-) {
-    try {
-        // Decode the author name from the URL to handle special characters.
-        const author = decodeURIComponent(params.author);
+export async function GET(request: Request) {
+  try {
+    const author = getAuthorFromRequest(request);
 
-        // Query Supabase for posts where the 'author' column matches.
-        const { data: posts, error } = await supabase
-            .from('posts')
-            .select('*') // Select all post fields for the profile page preview.
-            .eq('author', author)
-            .order('created_at', { ascending: false });
-
-        if (error) {
-            throw error;
-        }
-
-        // It's not an error if an author has no posts, just return an empty array.
-        return NextResponse.json(posts || []);
-
-    } catch (error) {
-        console.error('Database error:', error);
-        return NextResponse.json(
-            { error: 'Internal server error' }, 
-            { status: 500 }
-        );
+    if (!author) {
+      return NextResponse.json({ error: 'Missing author parameter' }, { status: 400 });
     }
+
+    const { data: posts, error } = await supabase
+      .from('posts')
+      .select('*')
+      .eq('author', author)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      throw error;
+    }
+
+    return NextResponse.json(posts || []);
+
+  } catch (error) {
+    console.error('Database error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
 }
