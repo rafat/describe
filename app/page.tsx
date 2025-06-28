@@ -7,8 +7,8 @@ import Link from 'next/link';
  * Caching is disabled to ensure fresh data on every request.
  */
 async function getPosts() {
-    const baseUrl = process.env.VERCEL_URL 
-        ? `https://${process.env.VERCEL_URL}` 
+    const baseUrl = process.env.NET_URL 
+        ? `https://${process.env.NET_URL}` 
         : 'http://localhost:3000';
     
     const res = await fetch(`${baseUrl}/api/posts`, { cache: 'no-store' });
