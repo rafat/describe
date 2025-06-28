@@ -92,8 +92,13 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         const body = await request.json();
         const { title, content, coin_address } = body;
 
-        // Build update object dynamically
-        const updateData: any = {};
+        const updateData: {
+            title?: string;
+            content?: string;
+            coin_address?: string;
+        } = {};
+
+        
         if (title !== undefined) updateData.title = title;
         if (content !== undefined) updateData.content = content;
         if (coin_address !== undefined) updateData.coin_address = coin_address;

@@ -30,6 +30,13 @@ async function getPost(id: string) {
 export default async function PostPage({ params }: { params: { id: string } }) {
     const awaitedParams = await params;
     const { id } = awaitedParams;
+        type Comment = {
+        id: number;
+        post_id: number;
+        author: `0x${string}` | string;
+        text: string;
+        created_at: string;
+    };
 
     try {
         const post = await getPost(id);
@@ -63,7 +70,7 @@ export default async function PostPage({ params }: { params: { id: string } }) {
                             <h2 className="text-3xl font-bold mb-4">Comments</h2>
                             <div className="space-y-4">
                                 {post.comments && post.comments.length > 0 ? (
-                                    post.comments.map((comment: any) => (
+                                    post.comments.map((comment: Comment) => (
                                         <div key={comment.id} className="p-4 bg-gray-800 rounded-lg">
                                             <p className="text-gray-300">{comment.text}</p>
                                             <div className="flex justify-between items-center mt-2">
@@ -78,12 +85,14 @@ export default async function PostPage({ params }: { params: { id: string } }) {
                                                         </span>
                                                     )}
                                                 </p>
-                                                {post.coin_address && (
-                                                    <RewardButton 
+                                                {typeof comment.author === 'string' &&
+                                                    comment.author.startsWith('0x') &&
+                                                    post.coin_address && (
+                                                        <RewardButton
                                                         coinAddress={post.coin_address}
-                                                        recipientAddress={comment.author} 
-                                                    />
-                                                )}
+                                                        recipientAddress={comment.author as `0x${string}`}
+                                                        />
+                                                    )}
                                             </div>
                                         </div>
                                     ))
