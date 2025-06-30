@@ -41,15 +41,6 @@ type Comment = {
     created_at: string;
 };
 
-type Post = {
-  id: number;
-  author?: string;
-  title?: string;
-  content?: string;
-  created_at?: string;
-  coin_address?: string;
-};
-
 // Referral Tracker Component
 function ReferralTracker({ postId }: { postId: string }) {
     const { referrerAddress, isTracked } = useReferralTracking(postId);
@@ -73,7 +64,7 @@ export default function PostPage({
 }: { 
     params: Promise<{ id: string }> 
 }) {
-    const [post, setPost] = useState<Post | null>(null);
+    const [post, setPost] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [resolvedParams, setResolvedParams] = useState<{ id: string } | null>(null);
