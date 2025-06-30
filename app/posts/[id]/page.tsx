@@ -38,8 +38,8 @@ type Post = {
  */
 async function getPost(id: string): Promise<Post | null> {
     // Use relative URL for internal API calls.
-    const baseUrl = process.env.NEXT_PUBLIC_URL 
-        ? `https://${process.env.NEXT_PUBLIC_URL}` 
+    const baseUrl = process.env.NET_URL 
+        ? `https://${process.env.NET_URL}` 
         : 'http://localhost:3000';
     
     const res = await fetch(`${baseUrl}/api/posts/${id}`, { 
