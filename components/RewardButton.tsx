@@ -9,6 +9,7 @@ import { baseSepolia } from 'viem/chains';
 interface RewardButtonProps {
     coinAddress: `0x${string}`;
     recipientAddress: `0x${string}`;
+    customLabel: string;
 }
 
 export default function RewardButton({ coinAddress, recipientAddress }: RewardButtonProps) {
