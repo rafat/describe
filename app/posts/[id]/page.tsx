@@ -41,6 +41,8 @@ async function getPost(id: string): Promise<Post | null> {
     const baseUrl = process.env.NET_URL 
         ? `https://${process.env.NET_URL}` 
         : 'http://localhost:3000';
+        
+    console.log(baseUrl);
     
     const res = await fetch(`${baseUrl}/api/posts/${id}`, { 
         cache: 'no-store',
