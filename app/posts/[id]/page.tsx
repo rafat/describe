@@ -10,10 +10,36 @@ import ReferralDashboard from "@/components/ReferralDashboard";
 import ReferralLeaderboard from "@/components/ReferralLeaderboard";
 import { useReferralTracking } from '@/hooks/useReferralTracking';
 
-async function getPost(id: string) {
-    // Use relative URL for internal API calls
-    const baseUrl = process.env.NET_URL 
-        ? `https://${process.env.NET_URL}` 
+// --- Type Definitions ---
+// Defines the structure for a comment object.
+type Comment = {
+    id: number;
+    post_id: number;
+    author: `0x${string}` | string;
+    text: string;
+    created_at: string;
+};
+
+// Defines the structure for the main post object.
+type Post = {
+    id: number;
+    title: string;
+    author: `0x${string}` | string;
+    content: string;
+    comments: Comment[];
+    created_at?: string;
+    coin_address?: `0x${string}`; // Address is optional and must be a hex string.
+};
+
+/**
+ * Fetches a single post from the API by its ID.
+ * @param id - The ID of the post to fetch.
+ * @returns A promise that resolves to the post object or null if not found.
+ */
+async function getPost(id: string): Promise<Post | null> {
+    // Use relative URL for internal API calls.
+    const baseUrl = process.env.NEXT_PUBLIC_URL 
+        ? `https://${process.env.NEXT_PUBLIC_URL}` 
         : 'http://localhost:3000';
     
     const res = await fetch(`${baseUrl}/api/posts/${id}`, { 
@@ -25,23 +51,18 @@ async function getPost(id: string) {
     
     if (!res.ok) {
         if (res.status === 404) {
-            return null;
+            return null; // Handle not found case gracefully.
         }
+        // Throw an error for other server-side issues.
         throw new Error(`Failed to fetch post: ${res.status}`);
     }
     
     return res.json();
 }
 
-type Comment = {
-    id: number;
-    post_id: number;
-    author: `0x${string}` | string;
-    text: string;
-    created_at: string;
-};
-
-// Referral Tracker Component
+/**
+ * A component to display a notification if the visit is being tracked for referrals.
+ */
 function ReferralTracker({ postId }: { postId: string }) {
     const { referrerAddress, isTracked } = useReferralTracking(postId);
     
@@ -58,23 +79,24 @@ function ReferralTracker({ postId }: { postId: string }) {
     return null;
 }
 
-// Main Post Page Component - converted to client component for referral tracking
-export default function PostPage({ 
-    params 
-}: { 
-    params: Promise<{ id: string }> 
-}) {
-    const [post, setPost] = useState<any>(null);
+/**
+ * The main component for displaying a single post page.
+ * It's a client component to handle state and effects for fetching data
+ * and tracking referrals.
+ */
+export default function PostPage({ params }: { params: Promise<{ id: string }> }) {
+    // State for the post data, using the specific 'Post' type.
+    const [post, setPost] = useState<Post | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [resolvedParams, setResolvedParams] = useState<{ id: string } | null>(null);
 
-    // Resolve params on client side
+    // Effect to resolve the `params` promise on the client side.
     useEffect(() => {
         params.then(setResolvedParams);
     }, [params]);
 
-    // Fetch post data
+    // Effect to fetch the post data once the ID is available.
     useEffect(() => {
         if (!resolvedParams?.id) return;
 
@@ -86,7 +108,7 @@ export default function PostPage({
                 setError(null);
             } catch (err) {
                 console.error('Error loading post:', err);
-                setError(err instanceof Error ? err.message : 'Unknown error');
+                setError(err instanceof Error ? err.message : 'An unknown error occurred');
             } finally {
                 setLoading(false);
             }
@@ -95,17 +117,20 @@ export default function PostPage({
         fetchPost();
     }, [resolvedParams?.id]);
 
+    // --- Render Logic ---
+
+    // Display a loading skeleton while data is being fetched.
     if (loading) {
         return (
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="max-w-3xl mx-auto text-center text-gray-400">
                     <div className="animate-pulse">
                         <div className="h-12 bg-gray-700 rounded mb-4"></div>
-                        <div className="h-4 bg-gray-700 rounded mb-6"></div>
+                        <div className="h-4 bg-gray-700 rounded w-1/4 mx-auto mb-6"></div>
                         <div className="space-y-3">
                             <div className="h-4 bg-gray-700 rounded"></div>
-                            <div className="h-4 bg-gray-700 rounded"></div>
-                            <div className="h-4 bg-gray-700 rounded"></div>
+                            <div className="h-4 bg-gray-700 rounded w-5/6 mx-auto"></div>
+                            <div className="h-4 bg-gray-700 rounded w-4/6 mx-auto"></div>
                         </div>
                     </div>
                 </div>
@@ -113,6 +138,7 @@ export default function PostPage({
         );
     }
 
+    // Display an error message if the fetch failed.
     if (error) {
         return (
             <div className="max-w-3xl mx-auto text-center text-red-400">
@@ -123,22 +149,23 @@ export default function PostPage({
         );
     }
 
+    // Display a "not found" message if the post doesn't exist.
     if (!post) {
         return (
             <div className="max-w-3xl mx-auto text-center text-gray-400">
                 <h1 className="text-5xl font-bold mb-4">Post Not Found</h1>
-                <p>The requested post does not exist.</p>
+                <p>The requested post could not be found.</p>
             </div>
         );
     }
 
+    // Render the full post page with content, comments, and sidebars.
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Referral tracking notification */}
             {resolvedParams?.id && <ReferralTracker postId={resolvedParams.id} />}
             
             <div className="lg:grid lg:grid-cols-4 lg:gap-8">
-                {/* Main content - takes up 3 columns */}
+                {/* Main content area */}
                 <main className="lg:col-span-3">
                     <div className="max-w-4xl">
                         <h1 className="text-5xl font-bold mb-2">{post.title}</h1>
@@ -152,10 +179,11 @@ export default function PostPage({
 
                         <hr className="my-8 border-gray-700" />
 
+                        {/* Comments Section */}
                         <h2 className="text-3xl font-bold mb-4">Comments</h2>
                         <div className="space-y-4">
                             {post.comments && post.comments.length > 0 ? (
-                                post.comments.map((comment: Comment) => (
+                                post.comments.map((comment) => (
                                     <div key={comment.id} className="p-4 bg-gray-800 rounded-lg">
                                         <p className="text-gray-300">{comment.text}</p>
                                         <div className="flex justify-between items-center mt-2">
@@ -174,9 +202,9 @@ export default function PostPage({
                                                 comment.author.startsWith('0x') &&
                                                 post.coin_address && (
                                                     <RewardButton
-                                                    coinAddress={post.coin_address}
-                                                    recipientAddress={comment.author as `0x${string}`}
-                                                    customLabel=''
+                                                        coinAddress={post.coin_address}
+                                                        recipientAddress={comment.author as `0x${string}`}
+                                                        customLabel=''
                                                     />
                                                 )}
                                         </div>
@@ -191,57 +219,31 @@ export default function PostPage({
                     </div>
                 </main>
 
-                {/* Sidebar - takes up 1 column */}
+                {/* Sidebar for desktop */}
                 <aside className="hidden lg:block lg:col-span-1">
                     <div className="sticky top-6 space-y-6">
-                        {/* Coin Info Sidebar */}
-                        {post.coin_address && (
-                            <div>
-                                <CoinInfoSidebar coinAddress={post.coin_address} />
-                            </div>
-                        )}
-                        
-                        {/* Referral Dashboard */}
-                        <div>
-                            <ReferralDashboard />
-                        </div>
-                        
-                        {/* Referral Leaderboard - only visible to post author */}
-                        {resolvedParams?.id && (
-                            <div>
-                                <ReferralLeaderboard 
-                                    postId={resolvedParams.id}
-                                    coinAddress={post.coin_address}
-                                    postAuthor={post.author}
-                                />
-                            </div>
-                        )}
-                    </div>
-                </aside>
-
-                {/* Mobile sections */}
-                <div className="lg:hidden mt-8 space-y-6">
-                    {/* Coin Info for mobile */}
-                    {post.coin_address && (
-                        <div>
-                            <CoinInfoSidebar coinAddress={post.coin_address} />
-                        </div>
-                    )}
-                    
-                    {/* Referral Dashboard for mobile */}
-                    <div>
+                        {post.coin_address && <CoinInfoSidebar coinAddress={post.coin_address} />}
                         <ReferralDashboard />
-                    </div>
-                    
-                    {/* Referral Leaderboard for mobile */}
-                    {resolvedParams?.id && (
-                        <div>
+                        {resolvedParams?.id && post.coin_address && (
                             <ReferralLeaderboard 
                                 postId={resolvedParams.id}
                                 coinAddress={post.coin_address}
                                 postAuthor={post.author}
                             />
-                        </div>
+                        )}
+                    </div>
+                </aside>
+
+                {/* Sections for mobile */}
+                <div className="lg:hidden mt-8 space-y-6">
+                    {post.coin_address && <CoinInfoSidebar coinAddress={post.coin_address} />}
+                    <ReferralDashboard />
+                    {resolvedParams?.id && post.coin_address && (
+                        <ReferralLeaderboard 
+                            postId={resolvedParams.id}
+                            coinAddress={post.coin_address}
+                            postAuthor={post.author}
+                        />
                     )}
                 </div>
             </div>
