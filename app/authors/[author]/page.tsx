@@ -48,7 +48,7 @@ export default async function AuthorPage({
     
     return (
         <div className="max-w-4xl mx-auto">
-            <p className="text-lg text-gray-400 text-center">Posts by</p>
+            <p className="text-lg text-gray-400 text-center">Posts by {authorName}</p>
             <h1 className="text-5xl font-bold mb-8 text-center text-white">{authorName}</h1>
             <div className="space-y-8">
                 {posts && posts.length > 0 ? (
