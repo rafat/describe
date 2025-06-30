@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
         
         // Filter by minimum referrals
         const eligibleReferrers = Array.from(referrerCounts.entries())
-            .filter(([_, count]) => count >= minValidReferrals)
+            .filter(([, count]) => count >= minValidReferrals)
             .map(([address, count]) => ({ address, count }));
         
         return NextResponse.json({ 

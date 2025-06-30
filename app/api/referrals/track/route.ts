@@ -8,7 +8,7 @@ const supabase = createClient(
 
 export async function POST(request: NextRequest) {
     try {
-        const { referrerAddress, postId, visitorInfo } = await request.json();
+        const { referrerAddress, postId } = await request.json();
         
         // Get visitor IP and user agent
         const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || '';
