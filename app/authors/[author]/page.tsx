@@ -16,8 +16,9 @@ type Post = {
  */
 async function getPostsByAuthor(author: string): Promise<Post[]> {
     const baseUrl =
-        process.env.NEXT_PUBLIC_URL 
-            ? `https://${process.env.NEXT_PUBLIC_URL }`
+        process.env.NEXT_PUBLIC_URL ||
+            process.env.NET_URL
+            ? `https://${process.env.NEXT_PUBLIC_URL || process.env.NET_URL}`
             : 'http://localhost:3000';
 
     console.log(baseUrl);
