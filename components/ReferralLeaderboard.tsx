@@ -30,11 +30,9 @@ export default function ReferralLeaderboard({ postId, coinAddress, postAuthor }:
     const [loading, setLoading] = useState(false);
     const [showLeaderboard, setShowLeaderboard] = useState(false);
 
-    // Only show to post author or if no author specified
-    const canViewLeaderboard = !postAuthor || account?.toLowerCase() === postAuthor.toLowerCase();
 
     useEffect(() => {
-        if (!showLeaderboard || !canViewLeaderboard) return;
+        if (!showLeaderboard) return;
 
         const fetchLeaderboard = async () => {
             setLoading(true);
@@ -52,11 +50,7 @@ export default function ReferralLeaderboard({ postId, coinAddress, postAuthor }:
         };
 
         fetchLeaderboard();
-    }, [postId, showLeaderboard, canViewLeaderboard]);
-
-    if (!canViewLeaderboard) {
-        return null;
-    }
+    }, [postId, showLeaderboard]);
 
     return (
         <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
@@ -69,7 +63,6 @@ export default function ReferralLeaderboard({ postId, coinAddress, postAuthor }:
                     {showLeaderboard ? 'Hide' : 'Show'} Leaderboard
                 </button>
             </div>
-
             {showLeaderboard && (
                 <>
                     {loading ? (
@@ -82,7 +75,7 @@ export default function ReferralLeaderboard({ postId, coinAddress, postAuthor }:
                         <div className="space-y-3">
                             {leaderboard.map((entry, index) => (
                                 <div key={entry.referrer_address} className="bg-gray-700 p-4 rounded-lg border border-gray-600">
-                                    <div className="flex items-center justify-between">
+                                    <div className="flex justify-between items-start">
                                         <div className="flex-1">
                                             <div className="flex items-center gap-3 mb-2">
                                                 <span className="text-lg font-bold text-yellow-400">
@@ -92,7 +85,7 @@ export default function ReferralLeaderboard({ postId, coinAddress, postAuthor }:
                                                     {entry.referrer_address.slice(0, 6)}...{entry.referrer_address.slice(-4)}
                                                 </span>
                                             </div>
-                                            <div className="grid grid-cols-3 gap-4 text-sm">
+                                            <div className="grid grid-cols-3 gap-2 text-sm">
                                                 <div>
                                                     <span className="text-gray-400">Total:</span>
                                                     <span className="text-blue-400 ml-1 font-semibold">
