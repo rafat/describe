@@ -15,16 +15,15 @@ export default function ShareButtons({ postTitle }: ShareButtonsProps) {
     
     // Include referral parameter if user is connected
     const baseUrl = process.env.NEXT_PUBLIC_URL; // Replace with your actual domain
-    const url = new URL(pathname, baseUrl);
-    if (account) {
-        url.searchParams.set('ref', account);
-    }
-    const shareUrl = url.toString();
+    const shareUrl = account 
+        ? `${baseUrl}${pathname}?ref=${account}`
+        : `${baseUrl}${pathname}`;
+    console.log(shareUrl);
 
     const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(postTitle)}`;
     const linkedInShareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(postTitle)}`;
     const redditShareUrl = `https://www.reddit.com/submit?url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(postTitle)}`;
-   
+
     return (
         <div className="flex items-center space-x-4 my-6">
             <h3 className="text-lg font-semibold">Share this post:</h3>
