@@ -9,15 +9,16 @@ const supabase = createClient(
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: Promise<{ address: string }> }
+    { params }: { params: Promise<{ address: string; postId: string }> } 
 ) {
     try {
-        const { address } = await params;
+        const { address, postId } = await params;
         
         const { data: stats, error } = await supabase
             .from('referral_stats')
             .select('*')
             .eq('referrer_address', address)
+            .eq('post_id', postId)
             .single();
             
         if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned

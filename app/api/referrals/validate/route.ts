@@ -1,3 +1,4 @@
+//app/api/referrals/validate/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
@@ -17,7 +18,7 @@ export async function POST(request: NextRequest) {
         
         if (isValid) {
             // Update referral as valid and calculate reward
-            const rewardAmount = 0.1; // Example: 0.1 tokens per valid referral
+            const rewardAmount = 10; // Example: 0.1 tokens per valid referral
             
             const { error } = await supabase
                 .from('referrals')
@@ -34,12 +35,12 @@ export async function POST(request: NextRequest) {
             // Update referral stats
             const { data: referral } = await supabase
                 .from('referrals')
-                .select('referrer_address')
+                .select('referrer_address, post_id') // Fetch post_id as well
                 .eq('id', referralId)
                 .single();
                 
             if (referral) {
-                await updateReferralStats(referral.referrer_address);
+                await updateReferralStats(referral.referrer_address, referral.post_id); // Pass post_id
             }
         }
         
@@ -51,23 +52,38 @@ export async function POST(request: NextRequest) {
     }
 }
 
-async function updateReferralStats(referrerAddress: string) {
+async function updateReferralStats(referrerAddress: string, postId: number) {
     // Get current stats
     const { data: stats } = await supabase
-        .from('referrals')
-        .select('id, is_valid, reward_amount')
-        .eq('referrer_address', referrerAddress);
+        .from('referral_stats')
+        .select('*')
+        .eq('referrer_address', referrerAddress)
+        .eq('post_id', postId) // Include post_id in the query
+        .single(); 
         
-    if (stats) {
-        const totalReferrals = stats.length;
-        const validReferrals = stats.filter(r => r.is_valid).length;
-        const totalRewards = stats.reduce((sum, r) => sum + (r.reward_amount || 0), 0);
+        const totalReferrals = stats ? stats.total_referrals + 1 : 1; // Increment total referrals
+        const validReferrals = stats ? stats.valid_referrals + 1 : 1;   // Increment valid referrals
+        const totalRewards = stats ? stats.total_rewards + 10 : 10;     // Increment total rewards; assume rewardAmount is 10
         
-        // Upsert stats
+        if (stats) {
+        // If stats already exist, update them
         await supabase
             .from('referral_stats')
-            .upsert({
+            .update({
+                total_referrals: totalReferrals,
+                valid_referrals: validReferrals,
+                total_rewards: totalRewards,
+                updated_at: new Date().toISOString()
+            })
+            .eq('referrer_address', referrerAddress)
+            .eq('post_id', postId);
+    } else {
+        // If no stats exist, create a new record
+        await supabase
+            .from('referral_stats')
+            .insert({
                 referrer_address: referrerAddress,
+                post_id: postId,
                 total_referrals: totalReferrals,
                 valid_referrals: validReferrals,
                 total_rewards: totalRewards,

@@ -224,7 +224,7 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
                 <aside className="hidden lg:block lg:col-span-1">
                     <div className="sticky top-6 space-y-6">
                         {post.coin_address && <CoinInfoSidebar coinAddress={post.coin_address} />}
-                        <ReferralDashboard />
+                        {resolvedParams?.id && (<ReferralDashboard postId={Number(resolvedParams.id)}/>)}
                         {resolvedParams?.id && post.coin_address && (
                             <ReferralLeaderboard 
                                 postId={resolvedParams.id}
@@ -238,7 +238,7 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
                 {/* Sections for mobile */}
                 <div className="lg:hidden mt-8 space-y-6">
                     {post.coin_address && <CoinInfoSidebar coinAddress={post.coin_address} />}
-                    <ReferralDashboard />
+                    {resolvedParams?.id && (<ReferralDashboard postId={Number(resolvedParams.id)}/>)}
                     {resolvedParams?.id && post.coin_address && (
                         <ReferralLeaderboard 
                             postId={resolvedParams.id}
