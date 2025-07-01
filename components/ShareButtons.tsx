@@ -18,6 +18,7 @@ export default function ShareButtons({ postTitle }: ShareButtonsProps) {
     const shareUrl = account 
         ? `${baseUrl}${pathname}?ref=${account}`
         : `${baseUrl}${pathname}`;
+    console.log(shareUrl);
 
     const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(postTitle)}`;
     const linkedInShareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(postTitle)}`;
