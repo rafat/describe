@@ -9,15 +9,14 @@ const supabase = createClient(
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: Promise<{ address: string; postId: string }> } 
+    { params }: { params: Promise<{ postId: number }> } 
 ) {
     try {
-        const { address, postId } = await params;
+        const { postId } = await params;
         
         const { data: stats, error } = await supabase
             .from('referral_stats')
             .select('*')
-            .eq('referrer_address', address)
             .eq('post_id', postId)
             .single();
             
