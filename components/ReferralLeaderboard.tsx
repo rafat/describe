@@ -2,7 +2,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useWeb3 } from '@/context/Web3Provider';
 import RewardButton from './RewardButton';
 
 interface LeaderboardEntry {
@@ -24,8 +23,7 @@ function isValidAddress(address: string | undefined): address is `0x${string}` {
     return typeof address === 'string' && address.startsWith('0x') && address.length === 42;
 }
 
-export default function ReferralLeaderboard({ postId, coinAddress, postAuthor }: ReferralLeaderboardProps) {
-    const { account } = useWeb3();
+export default function ReferralLeaderboard({ postId, coinAddress }: ReferralLeaderboardProps) {
     const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
     const [loading, setLoading] = useState(false);
     const [showLeaderboard, setShowLeaderboard] = useState(false);

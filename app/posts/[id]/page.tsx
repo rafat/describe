@@ -229,7 +229,6 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
                             <ReferralLeaderboard 
                                 postId={resolvedParams.id}
                                 coinAddress={post.coin_address}
-                                postAuthor={post.author}
                             />
                         )}
                     </div>
@@ -243,7 +242,6 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
                         <ReferralLeaderboard 
                             postId={resolvedParams.id}
                             coinAddress={post.coin_address}
-                            postAuthor={post.author}
                         />
                     )}
                 </div>
