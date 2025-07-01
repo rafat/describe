@@ -14,7 +14,7 @@ export default function ShareButtons({ postTitle }: ShareButtonsProps) {
     const { account } = useWeb3();
     
     // Include referral parameter if user is connected
-    const baseUrl = process.env.NET_URL; // Replace with your actual domain
+    const baseUrl = process.env.NEXT_PUBLIC_URL; // Replace with your actual domain
     const shareUrl = account 
         ? `${baseUrl}${pathname}?ref=${account}`
         : `${baseUrl}${pathname}`;
