@@ -12,7 +12,7 @@ interface RewardButtonProps {
     customLabel: string;
 }
 
-export default function RewardButton({ coinAddress, recipientAddress }: RewardButtonProps) {
+export default function RewardButton({ coinAddress, recipientAddress, customLabel }: RewardButtonProps) {
     const { isConnected, account, connect } = useWeb3();
     const [isLoading, setIsLoading] = useState(false);
     const [amount, setAmount] = useState('');
@@ -63,22 +63,29 @@ export default function RewardButton({ coinAddress, recipientAddress }: RewardBu
     };
 
     return (
-        <div className="flex items-center space-x-2 mt-2">
-            <input
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="Amount"
-                className="px-2 py-1 bg-gray-200 text-black border border-gray-300 rounded-md w-24 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-                disabled={isLoading}
-            />
-            <button
-                onClick={handleReward}
-                disabled={isLoading || !isConnected}
-                className="px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded-md text-sm font-semibold text-white disabled:bg-gray-500 disabled:cursor-not-allowed transition-colors"
-            >
-                {isLoading ? 'Sending...' : 'Reward'}
-            </button>
+        <div className="w-full max-w-full">
+            {customLabel && (
+                <div className="text-xs text-gray-400 mb-2">
+                    {customLabel}
+                </div>
+            )}
+            <div className="flex items-center gap-2 w-full">
+                <input
+                    type="number"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    placeholder="Amount"
+                    className="flex-1 min-w-0 px-2 py-1 bg-gray-600 text-white border border-gray-500 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    disabled={isLoading}
+                />
+                <button
+                    onClick={handleReward}
+                    disabled={isLoading || !isConnected}
+                    className="px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded-md text-sm font-semibold text-white disabled:bg-gray-500 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+                >
+                    {isLoading ? 'Sending...' : 'Reward'}
+                </button>
+            </div>
         </div>
     );
 }

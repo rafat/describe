@@ -51,14 +51,14 @@ export default function ReferralLeaderboard({ postId, coinAddress }: ReferralLea
     }, [postId, showLeaderboard]);
 
     return (
-        <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+        <div className="bg-gray-800 rounded-lg p-6 border border-gray-700 w-full">
             <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold text-white">Referral Leaderboard</h2>
                 <button
                     onClick={() => setShowLeaderboard(!showLeaderboard)}
-                    className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded transition-colors"
+                    className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded transition-colors flex-shrink-0"
                 >
-                    {showLeaderboard ? 'Hide' : 'Show'} Leaderboard
+                    {showLeaderboard ? 'Hide' : 'Show'}
                 </button>
             </div>
             {showLeaderboard && (
@@ -73,54 +73,52 @@ export default function ReferralLeaderboard({ postId, coinAddress }: ReferralLea
                         <div className="space-y-3">
                             {leaderboard.map((entry, index) => (
                                 <div key={entry.referrer_address} className="bg-gray-700 p-4 rounded-lg border border-gray-600">
-                                    <div className="flex justify-between items-start">
-                                        <div className="flex-1">
-                                            <div className="flex items-center gap-3 mb-2">
-                                                <span className="text-lg font-bold text-yellow-400">
-                                                    #{index + 1}
-                                                </span>
-                                                <span className="text-gray-300 font-mono text-sm">
-                                                    {entry.referrer_address.slice(0, 6)}...{entry.referrer_address.slice(-4)}
-                                                </span>
-                                            </div>
-                                            <div className="grid grid-cols-3 gap-2 text-sm">
-                                                <div>
-                                                    <span className="text-gray-400">Total:</span>
-                                                    <span className="text-blue-400 ml-1 font-semibold">
-                                                        {entry.total_referrals}
-                                                    </span>
-                                                </div>
-                                                <div>
-                                                    <span className="text-gray-400">Valid:</span>
-                                                    <span className="text-green-400 ml-1 font-semibold">
-                                                        {entry.valid_referrals}
-                                                    </span>
-                                                </div>
-                                                <div>
-                                                    <span className="text-gray-400">Rate:</span>
-                                                    <span className="text-cyan-400 ml-1 font-semibold">
-                                                        {entry.total_referrals > 0 
-                                                            ? ((entry.valid_referrals / entry.total_referrals) * 100).toFixed(0)
-                                                            : 0
-                                                        }%
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        {/* Reward Button for coin creators */}
-                                        {isValidAddress(coinAddress) && 
-                                         isValidAddress(entry.referrer_address) && 
-                                         entry.valid_referrals > 0 && (
-                                            <div className="ml-4">
-                                                <RewardButton
-                                                    coinAddress={coinAddress}
-                                                    recipientAddress={entry.referrer_address}
-                                                    customLabel={`Reward (${entry.valid_referrals} refs)`}
-                                                />
-                                            </div>
-                                        )}
+                                    {/* Header with rank and address */}
+                                    <div className="flex items-center gap-3 mb-3">
+                                        <span className="text-lg font-bold text-yellow-400">
+                                            #{index + 1}
+                                        </span>
+                                        <span className="text-gray-300 font-mono text-sm">
+                                            {entry.referrer_address.slice(0, 6)}...{entry.referrer_address.slice(-4)}
+                                        </span>
                                     </div>
+                                    
+                                    {/* Stats grid */}
+                                    <div className="grid grid-cols-3 gap-2 text-sm mb-3">
+                                        <div>
+                                            <span className="text-gray-400">Total:</span>
+                                            <span className="text-blue-400 ml-1 font-semibold">
+                                                {entry.total_referrals}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span className="text-gray-400">Valid:</span>
+                                            <span className="text-green-400 ml-1 font-semibold">
+                                                {entry.valid_referrals}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span className="text-gray-400">Rate:</span>
+                                            <span className="text-cyan-400 ml-1 font-semibold">
+                                                {entry.total_referrals > 0 
+                                                    ? ((entry.valid_referrals / entry.total_referrals) * 100).toFixed(0)
+                                                    : 0
+                                                }%
+                                            </span>
+                                        </div>
+                                    </div>
+                                    {/* Reward Button - Full width container */}
+                                    {isValidAddress(coinAddress) && 
+                                     isValidAddress(entry.referrer_address) && 
+                                     entry.valid_referrals > 0 && (
+                                        <div className="w-full mb-3">
+                                            <RewardButton
+                                                coinAddress={coinAddress}
+                                                recipientAddress={entry.referrer_address}
+                                                customLabel={`Reward (${entry.valid_referrals} refs)`}
+                                            />
+                                        </div>
+                                    )}
                                     
                                     {/* Latest activity */}
                                     <div className="mt-2 pt-2 border-t border-gray-600">
