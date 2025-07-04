@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DeScribe
+
+A Group Blogging Platform that allows any post to be minted as a Coin on Base Sepolia Testnet
 
 ## Getting Started
 
