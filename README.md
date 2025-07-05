@@ -1,38 +1,28 @@
 # DeScribe
 
-A Group Blogging Platform that allows any post to be minted as a Coin on Base Sepolia Testnet
+A Science and Research focused Group Blogging Platform that allows any post to be minted as a Coin on Base Sepolia Testnet using Zora protocol Coins SDK. The aim is not just to enable bloggers to be rewarded with a sizeable supply of the coin, it is also to enable creators to build a community of readers by letting them reward the community for commenting and for sharing these posts. More on this below.
 
-## Getting Started
+## DEMO
 
-First, run the development server:
+The project is live on netlify at https://playful-gecko-9fae0a.netlify.app/
+
+You will need some Base Sepolia Tokens if you want to interact with the Zora coin contracts.
+
+## Getting Started Locally
+
+The project is build on Next.Js 15+.
 
 ```bash
+
+git clone https://github.com/rafat/describe.git
+cd describe
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
+
+You'll also have to rename .example to .env and add your keys.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
