@@ -132,3 +132,6 @@ interface CoinCreationResult {
   deployment: any;
 }
 
+## Community Engagement
+
+We allow and encourage the creators to directly reward all community members who engage with the post. Creator can manually send coins to all the commenters based on his or her own criteria. Referrals are harder to track and measure with greater risk of abuse. To mitigate this we use referral validation system involving time spend on page, scrolling, clicking and other types of engagement. Each referral link is also unique and connected to the referrer's wallet address. This is also an area where LLMs and AI agents can be truly helpful in weeding out spam and frauds. This is on our To-Do list. Also on our To-Do list is to enable buying and selling the coins on the post page itself.
