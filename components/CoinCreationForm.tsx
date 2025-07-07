@@ -145,11 +145,11 @@ export default function CoinCreationForm({
 
   return (
     <div className="p-6 bg-gray-800 rounded-lg border border-gray-700">
-      <h3 className="text-xl font-semibold mb-4">Create a Coin for This Post</h3>
+      <h3 className="text-xl font-semibold mb-4 text-gray-200">Create a Coin for This Post</h3>
       
       <div className="space-y-4">
         <div>
-          <label htmlFor="coinName" className="block text-sm font-medium mb-1">Coin Name</label>
+          <label htmlFor="coinName" className="block text-sm font-medium mb-1 text-gray-200">Coin Name</label>
           <input
             id="coinName"
             type="text"
@@ -162,7 +162,7 @@ export default function CoinCreationForm({
         </div>
 
         <div>
-          <label htmlFor="coinSymbol" className="block text-sm font-medium mb-1">Symbol (Max 6 chars)</label>
+          <label htmlFor="coinSymbol" className="block text-sm font-medium mb-1 text-gray-200">Symbol (Max 6 chars)</label>
           <input
             id="coinSymbol"
             type="text"
@@ -175,7 +175,7 @@ export default function CoinCreationForm({
         </div>
 
         <div>
-          <label htmlFor="description" className="block text-sm font-medium mb-1">Description (Optional)</label>
+          <label htmlFor="description" className="block text-sm font-medium mb-1 text-gray-200">Description (Optional)</label>
           <textarea
             id="description"
             value={description}
@@ -188,7 +188,7 @@ export default function CoinCreationForm({
         </div>
 
         <div>
-          <label htmlFor="imageUrl" className="block text-sm font-medium mb-1">Image URL (Optional)</label>
+          <label htmlFor="imageUrl" className="block text-sm font-medium mb-1 text-gray-200">Image URL (Optional)</label>
           <input
             id="imageUrl"
             type="url"

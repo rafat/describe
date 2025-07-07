@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
         
         if (isValid) {
             // Update referral as valid and calculate reward
-            const rewardAmount = 10; // Example: 0.1 tokens per valid referral
+            const rewardAmount = 10;
             
             const { error } = await supabase
                 .from('referrals')
